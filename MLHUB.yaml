@@ -9,6 +9,9 @@ meta:
   author       : Arjun Raj
   url          : https://github.com/ar4152/health_rag
 dependencies:
+  pip3:
+    - langchain_ollama
+    - click
   files:
     - README.md
     - query.py
