@@ -1,6 +1,6 @@
 --- # This is a comment and otherwise ignored.
 meta:
-  name         : healh_rag
+  name         : health_rag
   title        : MLHub package for RAG based personalized health queries
   keywords     : health, privacy, rag, llm
   version      : 0.0.2
