@@ -6,6 +6,7 @@
 # ----------------------------------------------------------------------
 
 import click
+from langchain_ollama import ChatOllama
 
 # -----------------------------------------------------------------------
 # Command line argument and options
@@ -18,8 +19,19 @@ def cli(query: str):
     """
     Simple `hello world` string output.
     """
+    
+    llm = ChatOllama(
+        model="llama3.2:1b",
+        temperature=0.8,
+        num_predict=256,
+    )
 
-    print("Hello world!")
+    messages = [
+        ("human", query),
+    ]
+
+    ai_msg = llm.invoke(messages)
+    print(ai_msg.content)
 
 if __name__ == "__main__":
     cli(prog_name="query")
