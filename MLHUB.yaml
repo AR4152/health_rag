@@ -1,0 +1,16 @@
+--- # This is a comment and otherwise ignored.
+meta:
+  name         : healh_rag
+  title        : MLHub package for RAG based personalized health queries
+  keywords     : health, privacy, rag, llm
+  version      : 0.0.2
+  languages    : py
+  license      : gpl3
+  author       : Arjun Raj
+  url          : https://github.com/ar4152/health_rag
+dependencies:
+  files:
+    - README.md
+    - query.py
+commands:
+  query: Answer medical queries using personal health information.
