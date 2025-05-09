@@ -32,7 +32,7 @@ def cli(query: str, vectorstore_path: str | None):
     )
 
     if vectorstore_path and os.path.exists(vectorstore_path):
-        embeddings = OllamaEmbeddings(model="llama3.2:1b")
+        embeddings = OllamaEmbeddings(model="nomic-embed-text")
         db = FAISS.load_local(vectorstore_path, embeddings, allow_dangerous_deserialization=True)
         retriever = db.as_retriever()
         qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=retriever)
