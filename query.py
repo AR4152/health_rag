@@ -8,8 +8,8 @@
 import click
 import os
 from langchain_ollama import ChatOllama
-from langchain.vectorstores import FAISS
-from langchain.embeddings import OllamaEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_community.embeddings import OllamaEmbeddings
 from langchain.chains import RetrievalQA
 
 # -----------------------------------------------------------------------
