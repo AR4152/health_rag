@@ -5,7 +5,7 @@ meta:
   keywords     : health, privacy, rag, llm
   version      : 0.0.1
   languages    : py
-  license      : gpl3
+  license      : mit
   author       : Arjun Raj
   url          : https://github.com/ar4152/health_rag
 dependencies:
@@ -16,5 +16,9 @@ dependencies:
     - README.md
     - query.py
     - configure.sh
+    - pull_model.py
+    - remove_model.py
 commands:
-  query: Answer medical queries using personal health information.
+  query: Answer medical queries using personal health information with optional retrieval-augmented generation (RAG).
+  pull_model: Pull a specified LLM model.
+  remove_model: Remove a specified LLM model from local storage.

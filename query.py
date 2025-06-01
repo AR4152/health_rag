@@ -79,7 +79,8 @@ def run_query(query: str, vectorstore_path: str | None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Execute a query using an LLM with optional FAISS vector store retrieval."
+        description="Execute a query using an LLM with optional FAISS vector store retrieval.",
+        usage="ml query health_rag <query_string> [--vectorstore-path <path_to_vectorstore>]"
     )
     parser.add_argument("query", nargs="+", help="The query string to execute.")
     parser.add_argument(
