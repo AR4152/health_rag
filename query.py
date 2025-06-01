@@ -92,5 +92,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     full_query = " ".join(args.query)
-    print(f"Executing Query: {full_query}\n")
     run_query(full_query, args.vectorstore_path)
