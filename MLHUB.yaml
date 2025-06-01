@@ -11,7 +11,7 @@ meta:
 dependencies:
   pip3:
     - langchain_ollama
-    - click
+    - langchain_community
   files:
     - README.md
     - query.py
