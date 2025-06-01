@@ -3,7 +3,7 @@ meta:
   name         : health_rag
   title        : MLHub package for RAG based personalized health queries
   keywords     : health, privacy, rag, llm
-  version      : 0.0.2
+  version      : 0.0.1
   languages    : py
   license      : gpl3
   author       : Arjun Raj
@@ -15,5 +15,6 @@ dependencies:
   files:
     - README.md
     - query.py
+    - configure.sh
 commands:
   query: Answer medical queries using personal health information.
