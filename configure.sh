@@ -42,24 +42,12 @@ log_message() {
     local color_reset="\e[0m"
 
     case "$level" in
-        INFO)
-            local color="\e[32m"   # Green
-            ;;
-        WARNING)
-            local color="\e[33m"   # Yellow
-            ;;
-        ERROR)
-            local color="\e[31m"   # Red
-            ;;
-        DEBUG)
-            local color="\e[34m"   # Blue
-            ;;
-        SUCCESS)
-            local color="\e[36m"   # Cyan
-            ;;
-        *)
-            local color="\e[37m"   # Default (White)
-            ;;
+        INFO) local color="\e[32m" ;; # Green
+        WARNING) local color="\e[33m" ;; # Yellow
+        ERROR) local color="\e[31m" ;; # Red
+        DEBUG) local color="\e[34m" ;; # Blue
+        SUCCESS) local color="\e[36m" ;; # Cyan
+        *) local color="\e[37m" ;; # Default (White)
     esac
 
     echo -e "${color}[$level]${color_reset} $message"
@@ -97,35 +85,68 @@ get_user_response() {
     done
 }
 
-# function to download the LLaMA model
-download_llama_model() {
-    log_message "INFO" "Downloading the LLaMA model using Ollama..."
-    if ollama pull llama3.2:1b; then
-        log_message "SUCCESS" "Successfully downloaded the LLaMA model."
+# function to check if the LLaMA model is already pulled
+check_llama_model_pulled() {
+    if ollama list | grep -q "llama3.2.*1b"; then
+        log_message "INFO" "LLaMA model is already pulled."
+        return 0
     else
-        log_message "ERROR" "Failed to download the LLaMA model."
-        exit 1
+        log_message "INFO" "LLaMA model is not pulled."
+        return 1
     fi
 }
 
-log_message "INFO" "This script will install the Ollama tool on your system."
+# function to download the LLaMA model
+download_llama_model() {
+    if check_llama_model_pulled; then
+        log_message "SUCCESS" "No need to download the LLaMA model again."
+    else
+        log_message "INFO" "Downloading the LLaMA model using Ollama..."
+        if ollama pull llama3.2:1b; then
+            log_message "SUCCESS" "Successfully downloaded the LLaMA model."
+        else
+            log_message "ERROR" "Failed to download the LLaMA model."
+            exit 1
+        fi
+    fi
+}
+
+# clean up temporary files on exit
+cleanup() {
+    if [[ -n "$temp_script" && -f "$temp_script" ]]; then
+        rm -f "$temp_script"
+        log_message "DEBUG" "Cleaned up temporary install script."
+    fi
+}
+trap cleanup EXIT
+
+
+log_message "INFO" "This script will ensure Ollama is installed and download the LLaMA model."
 
 # check if Ollama is already installed
 if check_ollama_installed; then
-    log_message "SUCCESS" "No further action is required."
-    exit 0
-fi
-
-get_user_response
-
-# proceed with installation if user confirmed
-log_message "INFO" "Installing Ollama..."
-if curl -fsSL https://ollama.com/install.sh | bash -x; then
-    log_message "SUCCESS" "Ollama has been successfully installed."
+    log_message "SUCCESS" "Ollama is installed."
 else
-    log_message "ERROR" "Failed to install Ollama. Please check your internet connection or the installation script."
-    exit 1
+    get_user_response
+
+    # proceed with installation if user confirmed
+    log_message "INFO" "Installing Ollama..."
+    temp_script="/tmp/ollama_install.sh"
+
+    if curl -fsSL https://ollama.com/install.sh -o "$temp_script"; then
+        log_message "INFO" "Successfully downloaded the Ollama installation script."
+
+        if bash "$temp_script" 2>&1 | tee /dev/tty; then
+            log_message "SUCCESS" "Ollama has been successfully installed."
+        else
+            log_message "ERROR" "Failed to execute the Ollama installation script."
+            exit 1
+        fi
+    else
+        log_message "ERROR" "Failed to download the Ollama installation script. Please check your internet connection."
+        exit 1
+    fi
 fi
 
-# download LLaMA model
+# Always attempt to download LLaMA model
 download_llama_model
