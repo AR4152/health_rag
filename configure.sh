@@ -33,7 +33,7 @@
 # Author: Arjun Raj
 # Date: 2025-05-30
 # Version: 1.0
-# Usage: ml health_rag configure
+# Usage: ml configure health_rag
 
 # different level logger function
 log_message() {
