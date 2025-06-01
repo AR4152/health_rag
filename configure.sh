@@ -120,7 +120,7 @@ get_user_response
 
 # proceed with installation if user confirmed
 log_message "INFO" "Installing Ollama..."
-if curl -fsSL https://ollama.com/install.sh | sh; then
+if curl -fsSL https://ollama.com/install.sh | bash -x; then
     log_message "SUCCESS" "Ollama has been successfully installed."
 else
     log_message "ERROR" "Failed to install Ollama. Please check your internet connection or the installation script."
