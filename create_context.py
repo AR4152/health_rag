@@ -35,7 +35,7 @@ them into chunks, generates embeddings using an LLM model via Ollama, and saves
 them into a FAISS vector store for efficient similarity search.
 
 Usage:
-    ml create_context health_rag --input <path1> <path2> ... [--save_dir <directory>]
+    ml create_context health_rag <path1> <path2> ... [--save_dir <directory>]
         [--embedding_model <model_name>]
 """
 

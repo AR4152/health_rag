@@ -39,8 +39,8 @@ Usage:
 import os
 import argparse
 from langchain_ollama import ChatOllama
+from langchain_ollama.embeddings import OllamaEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import OllamaEmbeddings
 from langchain.chains import RetrievalQA
 
 
@@ -68,8 +68,8 @@ def run_query(query: str, vectorstore_path: str | None):
         db = FAISS.load_local(vectorstore_path, embeddings, allow_dangerous_deserialization=True)
         retriever = db.as_retriever()
         qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=retriever)
-        result = qa_chain.run(query)
-        print(result)
+        result = qa_chain.invoke(query)
+        print(result.get('result'))
     else:
         # Perform direct LLM invocation
         messages = [("human", query)]
@@ -86,7 +86,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--vectorstore-path",
         type=str,
-        default=None,
+        default="./vector_store",
         help="Optional path to the FAISS vector store directory.",
     )
     args = parser.parse_args()
