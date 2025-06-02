@@ -103,7 +103,7 @@ download_model() {
         log_message "SUCCESS" "No need to download the model '$model_name' again."
     else
         log_message "INFO" "Downloading model '$model_name' using Ollama..."
-        if ollama pull "$model_name"; then
+        if ollama pull "$model_name" 2>&1; then
             log_message "SUCCESS" "Successfully downloaded the model '$model_name'."
         else
             log_message "ERROR" "Failed to download the model '$model_name'."
@@ -137,7 +137,7 @@ else
     if curl -fsSL https://ollama.com/install.sh -o "$temp_script"; then
         log_message "INFO" "Successfully downloaded the Ollama installation script."
 
-        if bash "$temp_script" 2>&1 | tee /dev/tty; then
+        if bash "$temp_script" 2>&1; then
             log_message "SUCCESS" "Ollama has been successfully installed."
         else
             log_message "ERROR" "Failed to execute the Ollama installation script."
