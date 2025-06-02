@@ -10,8 +10,12 @@ meta:
   url          : https://github.com/ar4152/health_rag
 dependencies:
   pip3:
-    - langchain_ollama
-    - langchain_community
+    - langchain
+    - langchain-ollama
+    - langchain-community
+    - unstructured[markdown,pdf,docx]
+    - markdown
+    - faiss-cpu
   files:
     - README.md
     - query.py

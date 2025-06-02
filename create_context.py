@@ -42,7 +42,7 @@ Usage:
 import argparse
 import os
 import glob
-from langchain.document_loaders import (
+from langchain_community.document_loaders import (
     PyPDFLoader,
     TextLoader,
     Docx2txtLoader,
