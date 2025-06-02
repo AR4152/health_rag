@@ -28,7 +28,7 @@
 #   This script performs the necessary installation for the health_rag MLHub package.
 #   It checks if Ollama is installed on the system. If not, it prompts the user for 
 #   permission to install it. Upon successful installation, it downloads the LLaMA 3.2 1B
-#   model using Ollama.
+#   and nomic-embed-text models using Ollama.
 #
 # Author: Arjun Raj
 # Date: 2025-05-30
@@ -85,27 +85,28 @@ get_user_response() {
     done
 }
 
-# function to check if the LLaMA model is already pulled
-check_llama_model_pulled() {
-    if ollama list | grep -q "llama3.2.*1b"; then
-        log_message "INFO" "LLaMA model is already pulled."
+# function to check if the model is already pulled
+check_model_pulled() {
+    local model_name="$1"
+    if ollama list | grep -q "$model_name"; then
+        log_message "INFO" "Model '$model_name' is already pulled."
         return 0
     else
-        log_message "INFO" "LLaMA model is not pulled."
+        log_message "INFO" "Model '$model_name' is not pulled."
         return 1
     fi
 }
-
-# function to download the LLaMA model
-download_llama_model() {
-    if check_llama_model_pulled; then
-        log_message "SUCCESS" "No need to download the LLaMA model again."
+# function to download the model
+download_model() {
+    local model_name="$1"
+    if check_model_pulled "$model_name"; then
+        log_message "SUCCESS" "No need to download the model '$model_name' again."
     else
-        log_message "INFO" "Downloading the LLaMA model using Ollama..."
-        if ollama pull llama3.2:1b; then
-            log_message "SUCCESS" "Successfully downloaded the LLaMA model."
+        log_message "INFO" "Downloading model '$model_name' using Ollama..."
+        if ollama pull "$model_name"; then
+            log_message "SUCCESS" "Successfully downloaded the model '$model_name'."
         else
-            log_message "ERROR" "Failed to download the LLaMA model."
+            log_message "ERROR" "Failed to download the model '$model_name'."
             exit 1
         fi
     fi
@@ -121,7 +122,7 @@ cleanup() {
 trap cleanup EXIT
 
 
-log_message "INFO" "This script will ensure Ollama is installed and download the LLaMA model."
+log_message "INFO" "This script will ensure Ollama is installed and download the required models."
 
 # check if Ollama is already installed
 if check_ollama_installed; then
@@ -148,5 +149,8 @@ else
     fi
 fi
 
-# Always attempt to download LLaMA model
-download_llama_model
+# download LLaMA model
+download_model "llama3.2:1b"
+
+# download nomic-embed-text model
+download_model "nomic-embed-text"
