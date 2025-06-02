@@ -1,0 +1,30 @@
+--- # This is a comment and otherwise ignored.
+meta:
+  name         : health_rag
+  title        : MLHub package for RAG based personalized health queries
+  keywords     : health, privacy, rag, llm
+  version      : 0.0.1
+  languages    : py
+  license      : mit
+  author       : Arjun Raj
+  url          : https://github.com/ar4152/health_rag
+dependencies:
+  pip3:
+    - langchain
+    - langchain-ollama
+    - langchain-community
+    - unstructured[markdown,pdf,docx]
+    - markdown
+    - faiss-cpu
+  files:
+    - README.md
+    - query.py
+    - configure.sh
+    - pull_model.py
+    - remove_model.py
+    - create_context.py
+commands:
+  query: Answer medical queries using personal health information with optional retrieval-augmented generation (RAG).
+  pull_model: Pull a specified LLM model.
+  remove_model: Remove a specified LLM model from local storage.
+  create_context: Create a FAISS vector store from documents for efficient health information retrieval.
