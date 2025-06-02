@@ -48,9 +48,9 @@ from langchain_community.document_loaders import (
     Docx2txtLoader,
     UnstructuredMarkdownLoader,
 )
+from langchain_community.vectorstores import FAISS
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_ollama import OllamaEmbeddings
-from langchain_community.vectorstores import FAISS
 
 
 def create_vector_store(input_paths, save_dir="vector_store", embedding_model="nomic-embed-text"):
@@ -123,9 +123,7 @@ def create_vector_store(input_paths, save_dir="vector_store", embedding_model="n
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Create a FAISS vector store from documents.")
-    parser.add_argument(
-        "--input", "-i", nargs="+", required=True, help="Paths to input files and/or folders."
-    )
+    parser.add_argument("input_paths", nargs="+", help="Paths to input files and/or folders.")
     parser.add_argument(
         "--save_dir",
         "-s",
