@@ -49,7 +49,7 @@ ml query health_rag "What is my RBC count? Is it normal?"
 This script generates a **FAISS vector store** from your documents, which enables fast, similarity-based query processing. To create the vector store:
 
 ```bash
-ml create_context health_rag --input <path_to_documents> --save_dir <path_to_save_vectorstore>
+ml create_context health_rag <path_to_documents> --save_dir <path_to_save_vectorstore>
 ```
 
 It supports various document formats (PDF, TXT, DOCX, and MD).
