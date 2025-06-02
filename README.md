@@ -4,7 +4,7 @@ This [MLHub](https://mlhub.au/) package is designed to create a **Retrieval-Augm
 
 ## Overview
 
-The system consists of several components working together and makes use of public libraries (such as LangChain and Ollama) to enable personalized health queries:
+The system consists of several components working together and makes use of public libraries (such as *LangChain* to orchestrate the retrieval and integration of private health data and *Ollama* as the underlying large language model (LLM) provider) to enable personalized health queries:
 
 1. **Document Ingestion**: Documents (such as lab reports or health records) are loaded and processed into smaller chunks. Supported formats include PDF, TXT, DOCX, and MD.
 
@@ -16,7 +16,7 @@ This system ensures that healthcare queries can be answered using personal data 
 
 ## Quick Start
 
-First, you'll need to install the [mlhub](https://github.com/mlhubber/mlhub) package and [health_rag](https://github.com/ar4152/health_rag), then and configure them. This process may take some time depending on your system and internet speed.
+First, you'll need to install the [mlhub](https://github.com/mlhubber/mlhub) package and [health_rag](https://github.com/ar4152/health_rag), then configure them. This process may take some time depending on your system and internet speed.
 
 ```bash
 # Install and configure mlhub
@@ -70,13 +70,20 @@ If you need to remove a model, use the `remove_model.py` script:
 ml remove_model health_rag <model_name>
 ```
 
-## Execute Queries
+### Execute Queries
 
 Once your vector store is ready, you can query the system. You can either use the vector store for RAG or directly query the model. Use the `query.py` script to run a query:
 
 ```bash
 ml query health_rag <query_string> [--vectorstore-path <path_to_vectorstore>]
 ```
+
+### Default Models
+
+- Embedding Model: The default model for generating embeddings from the document chunks is [`nomic-embed-text`](https://ollama.com/library/nomic-embed-text). You can replace it with any other model if preferred by using the --embedding_model flag when creating the context.
+
+- Query Model: By default, queries are processed using [`llama3.2:1b`](https://ollama.com/library/llama3.2:1b).
+
 
 
 ## License
