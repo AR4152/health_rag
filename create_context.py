@@ -140,5 +140,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     create_vector_store(
-        input_paths=args.input, save_dir=args.save_dir, embedding_model=args.embedding_model
+        input_paths=args.input_paths, save_dir=args.save_dir, embedding_model=args.embedding_model
     )
