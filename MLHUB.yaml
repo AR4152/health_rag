@@ -3,7 +3,7 @@ meta:
   name         : health_rag
   title        : MLHub package for RAG based personalized health queries
   keywords     : health, privacy, rag, llm
-  version      : 0.0.1
+  version      : 0.0.2
   languages    : py
   license      : mit
   author       : Arjun Raj
@@ -13,7 +13,7 @@ dependencies:
     - langchain
     - langchain-ollama
     - langchain-community
-    - unstructured[markdown,pdf,docx]
+    - unstructured[all-docs]
     - markdown
     - faiss-cpu
   files:
