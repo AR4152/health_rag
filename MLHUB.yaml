@@ -28,3 +28,4 @@ commands:
   pull_model: Pull a specified LLM model.
   remove_model: Remove a specified LLM model from local storage.
   create_context: Create a FAISS vector store from documents for efficient health information retrieval.
+  chat_mode: Create a FAISS vector store from documents for efficient health information retrieval.
