@@ -23,9 +23,13 @@ dependencies:
     - pull_model.py
     - remove_model.py
     - create_context.py
+    - util.py
+    - chat_mode.py
+    - constant.py
+    - document_loader.py
 commands:
   query: Answer medical queries using personal health information with optional retrieval-augmented generation (RAG).
   pull_model: Pull a specified LLM model.
   remove_model: Remove a specified LLM model from local storage.
   create_context: Create a FAISS vector store from documents for efficient health information retrieval.
-  chat_mode: Create a FAISS vector store from documents for efficient health information retrieval.
+  chat_mode: Interactive chat assistant with memory.
