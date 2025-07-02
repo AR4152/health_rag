@@ -37,7 +37,8 @@ def create_vector_store(
         save_dir (str): Directory path to save the vector store.
         embedding_model (str): Model name for embeddings.
 
-    Supported file formats: .pdf, .txt, .docx, .md
+    Supported file formats: `.pdf`, `.txt`, `.docx`, `.md`, `.csv`, `.eml`, `.xlsx`, `.xls`, `.png`,
+                            `.jpg`, `.jpeg`, `.tiff`, `.bmp`
 
     """
     # normalise input paths
