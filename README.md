@@ -1,12 +1,14 @@
 # An MLHub Package for Personalized Health Queries
 
+*A simple toolkit to work with personal health data and LLMs locally.*
+
 This [MLHub](https://mlhub.au/) package is designed to create a **Retrieval-Augmented Generation (RAG)** system for personalized healthcare queries using large language models (LLMs) and private health data. The system operates locally to ensure privacy is preserved.
 
 ## Overview
 
 The system consists of several components working together and makes use of public libraries (such as *LangChain* to orchestrate the retrieval and integration of private health data and *Ollama* as the underlying large language model (LLM) provider) to enable personalized health queries:
 
-1. **Document Ingestion**: Documents (such as lab reports or health records) are loaded and processed into smaller chunks. Supported formats include PDF, TXT, DOCX, and MD.
+1. **Document Ingestion**: Documents (such as lab reports or health records) are loaded and processed into smaller chunks. Some supported formats include PDF, TXT, DOCX, and MD.
 
 2. **Vector Store Creation**: The chunks of text are then converted into embeddings using an LLM, such as nomic-embed-text, and stored in a FAISS vector store. This allows for fast similarity-based searches on the data.
 
@@ -38,53 +40,53 @@ wget https://www.testing.com/wp-content/uploads/2021/07/CBC-sample-report-with-n
 ml create_context health_rag sample_lab_report.pdf
 
 # Ask a query related to the report
-ml query health_rag "What is my RBC count? Is it normal?"
+ml query health_rag "What is my RBC count? Is it normal?" --vectorstore_path ./vector_store
 ```
 
-## Detailed Usage - Command Line Tools
+## Commands Overview
 
+1. **chat\_mode**
+   Start an interactive chat with memory.
 
-### `create_context` - Create FAISS Vector Store
+   ```
+   ml chat_mode health_rag
+   ```
 
-This script generates a **FAISS vector store** from your documents, which enables fast, similarity-based query processing. To create the vector store:
+2. **query**
+   Answer health questions with optional retrieval from your data.
 
-```bash
-ml create_context health_rag <path_to_documents> --save_dir <path_to_save_vectorstore>
-```
+   ```
+   ml query health_rag "Explain my lab results." --vectorstore_path vector_store/
+   ```
 
-It supports various document formats (PDF, TXT, DOCX, and MD).
+3. **pull\_model**
+   Download LLM models for offline use.
 
-### `pull_model` - Pull LLM Models
+   ```
+   ml pull_model health_rag llama3.2:1b
+   ```
 
-You can pull additional models using the `pull_model.py` script:
+4. **remove\_model**
+   Remove downloaded models to free space.
 
-```bash
-ml pull_model health_rag <model_name>
-```
+   ```
+   ml remove_model health_rag llama3.2:1b
+   ```
 
-### `remove_model` - Remove LLM Models
+5. **create\_context**
+   Build a FAISS vector store from documents.
 
-If you need to remove a model, use the `remove_model.py` script:
+   ```
+   ml create_context health_rag ~/Documents/HealthData --save_dir vector_store
+   ```
 
-```bash
-ml remove_model health_rag <model_name>
-```
-
-### Execute Queries
-
-Once your vector store is ready, you can query the system. You can either use the vector store for RAG or directly query the model. Use the `query.py` script to run a query:
-
-```bash
-ml query health_rag <query_string> [--vectorstore-path <path_to_vectorstore>]
-```
+For full usage and examples, see the [detailed commands documentation](./docs/commands.md).
 
 ### Default Models
 
 - Embedding Model: The default model for generating embeddings from the document chunks is [`nomic-embed-text`](https://ollama.com/library/nomic-embed-text). You can replace it with any other model if preferred by using the --embedding_model flag when creating the context.
 
 - Query Model: By default, queries are processed using [`llama3.2:1b`](https://ollama.com/library/llama3.2:1b).
-
-
 
 ## License
 This code is licensed under the [MIT License](./LICENSE).
