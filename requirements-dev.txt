@@ -1,0 +1,13 @@
+# Core project dependencies
+mlhub
+langchain
+langchain-ollama
+langchain-community
+unstructured[all-docs]
+markdown
+faiss-cpu
+
+# Development tooling
+ruff
+mypy
+pre-commit
