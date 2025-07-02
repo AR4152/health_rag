@@ -1,33 +1,4 @@
-# ------------------------------------------------------------------------------
-# MIT License
-#
-# Copyright (c) 2025 Arjun Raj
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-# ------------------------------------------------------------------------------
-
-"""
-MLHub Toolkit for health_rag - create_context.
-
-Author: Arjun Raj
-Date: 2025-06-02
-Version: 0.0.1
+"""MLHub Toolkit for health_rag - create_context.
 
 Command-line utility for generating FAISS vector stores from document files.
 This tool reads documents from specified file paths or directories, processes
@@ -40,22 +11,26 @@ Usage:
 """
 
 import argparse
-import os
 import glob
-from langchain_community.document_loaders import (
-    PyPDFLoader,
-    TextLoader,
-    Docx2txtLoader,
-    UnstructuredMarkdownLoader,
-)
-from langchain_community.vectorstores import FAISS
+import os
+from typing import List
+
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores import FAISS
+from langchain_core.documents import Document
 from langchain_ollama import OllamaEmbeddings
 
+from constant import SUPPORTED_FILE_TYPES
+from document_loader import DocumentLoader
+from util import normalize_path
 
-def create_vector_store(input_paths, save_dir="vector_store", embedding_model="nomic-embed-text"):
-    """
-    Create a vector store from a list of files and/or folders.
+
+def create_vector_store(
+    input_paths: List[str],
+    save_dir: str = "vector_store",
+    embedding_model: str = "nomic-embed-text",
+) -> None:
+    """Create a vector store from a list of files and/or folders.
 
     Args:
         input_paths (list[str]): List of file or folder paths.
@@ -63,12 +38,15 @@ def create_vector_store(input_paths, save_dir="vector_store", embedding_model="n
         embedding_model (str): Model name for embeddings.
 
     Supported file formats: .pdf, .txt, .docx, .md
+
     """
-    supported_extensions = {".pdf", ".txt", ".docx", ".md"}
-    all_chunks = []
+    # normalise input paths
+    input_paths = [normalize_path(p) for p in input_paths]
+
+    all_chunks: List[Document] = []
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
 
-    file_list = []
+    file_list: List[str] = []
 
     # Gather all files
     for path in input_paths:
@@ -79,9 +57,9 @@ def create_vector_store(input_paths, save_dir="vector_store", embedding_model="n
         if os.path.isfile(path):
             file_list.append(path)
         elif os.path.isdir(path):
-            # Recursively add all supported files from the folder
-            for ext in supported_extensions:
-                file_list.extend(glob.glob(os.path.join(path, f"**/*{ext}"), recursive=True))
+            # Add all supported files from the folder
+            for ext in SUPPORTED_FILE_TYPES:
+                file_list.extend(glob.glob(os.path.join(path, f"**/*{ext}")))
 
     if not file_list:
         print("No valid files found to process.")
@@ -91,16 +69,10 @@ def create_vector_store(input_paths, save_dir="vector_store", embedding_model="n
         ext = os.path.splitext(file_path)[1].lower()
 
         try:
-            if ext == ".pdf":
-                loader = PyPDFLoader(file_path)
-            elif ext == ".txt":
-                loader = TextLoader(file_path, encoding="utf-8")
-            elif ext == ".docx":
-                loader = Docx2txtLoader(file_path)
-            elif ext == ".md":
-                loader = UnstructuredMarkdownLoader(file_path)
+            if ext in SUPPORTED_FILE_TYPES:
+                loader = DocumentLoader(file_path)
             else:
-                print(f"Unsupported file type: {ext}")
+                print(f"Unsupported file type: {file_path}")
                 continue
 
             documents = loader.load()
