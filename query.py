@@ -1,60 +1,30 @@
-# ------------------------------------------------------------------------------
-# MIT License
-#
-# Copyright (c) 2025 Arjun Raj
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-# ------------------------------------------------------------------------------
+"""MLHub Toolkit for health_rag - query.
 
-"""
-MLHub Toolkit for health_rag - query.
-
-Author: Arjun Raj
-Date: 2025-06-02
-Version: 0.0.1
-
-Command-line tool to execute queries with a Language Model (LLM) with optional FAISS-based
-retrieval.
+Command-line tool to execute queries with a Language Model (LLM) with FAISS-based retrieval.
 
 Usage:
-    ml query health_rag <query_string> [--vectorstore-path <path_to_vectorstore>]
+    ml query health_rag <query_string> [--vectorstore_path <path_to_vectorstore>]
 """
 
-import os
 import argparse
+import os
+
+from langchain.chains import RetrievalQA
+from langchain_community.vectorstores import FAISS
 from langchain_ollama import ChatOllama
 from langchain_ollama.embeddings import OllamaEmbeddings
-from langchain_community.vectorstores import FAISS
-from langchain.chains import RetrievalQA
 
 
-def run_query(query: str, vectorstore_path: str | None):
-    """
-    Executes a query using a local LLM model, optionally utilizing a FAISS vector store for
+def run_query(query: str, vectorstore_path: str | None) -> None:
+    """Execute a query using a local LLM model, optionally utilizing a FAISS vector store for
     retrieval-augmented generation (RAG).
 
     Args:
         query (str): The query string to execute.
         vectorstore_path (str | None): Path to the FAISS vector store directory. If None, direct
                                        LLM querying is performed.
-    """
 
+    """  # noqa: D205
     # initialize llm
     llm = ChatOllama(
         model="llama3.2:1b",
@@ -69,7 +39,7 @@ def run_query(query: str, vectorstore_path: str | None):
         retriever = db.as_retriever()
         qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=retriever)
         result = qa_chain.invoke(query)
-        print(result.get('result'))
+        print(result.get("result"))
     else:
         # Perform direct LLM invocation
         messages = [("human", query)]
@@ -80,11 +50,11 @@ def run_query(query: str, vectorstore_path: str | None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Execute a query using an LLM with optional FAISS vector store retrieval.",
-        usage="ml query health_rag <query_string> [--vectorstore-path <path_to_vectorstore>]"
+        usage="ml query health_rag <query_string> [--vectorstore-path <path_to_vectorstore>]",
     )
     parser.add_argument("query", nargs="+", help="The query string to execute.")
     parser.add_argument(
-        "--vectorstore-path",
+        "--vectorstore_path",
         type=str,
         default=None,
         help="Optional path to the FAISS vector store directory.",
